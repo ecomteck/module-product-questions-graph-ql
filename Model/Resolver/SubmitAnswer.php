@@ -14,7 +14,7 @@
  * version in the future.
  *
  * @category    Ecomteck
- * @package     Ecomteck_ProductQuestionsGraph
+ * @package     Ecomteck_ProductQuestionsGraphQl
  * @copyright   Copyright (c) 2019 Ecomteck (https://ecomteck.com/)
  * @license     https://ecomteck.com/LICENSE.txt
  */
@@ -43,7 +43,7 @@ class SubmitAnswer implements ResolverInterface
     /**
      * @var CreateAnswer
      */
-    private $creatAnswer;
+    private $createAnswer;
 
     /**
      * User Type Model
@@ -64,18 +64,18 @@ class SubmitAnswer implements ResolverInterface
 
     /**
      * SubmitQuestion constructor.
-     * @param CreateAnswer $creatAnswer
+     * @param CreateAnswer $createAnswer
      * @param UserType $userType
      * @param AnswerDataProvider $answerDataProvider
      * @param QuestionRepositoryInterface $questionRepository
      */
     public function __construct(
-        CreateAnswer $creatAnswer,
+        CreateAnswer $createAnswer,
         UserType $userType,
         AnswerDataProvider $answerDataProvider,
         QuestionRepositoryInterface $questionRepository
     ) {
-        $this->creatAnswer = $creatAnswer;
+        $this->createAnswer = $createAnswer;
         $this->userType = $userType;
         $this->answerDataProvider = $answerDataProvider;
         $this->questionRepository = $questionRepository;
@@ -103,7 +103,7 @@ class SubmitAnswer implements ResolverInterface
         $data['answer_created_by'] = $userCode;
         $data['answer_user_type_id'] = $userCode;
 
-        $answer = $this->creatAnswer->execute($data);
+        $answer = $this->createAnswer->execute($data);
         try {
             $answerData = $this->answerDataProvider->getData($answer->getId());
         } catch (NoSuchEntityException $e) {

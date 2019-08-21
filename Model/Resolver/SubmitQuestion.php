@@ -14,7 +14,7 @@
  * version in the future.
  *
  * @category    Ecomteck
- * @package     Ecomteck_ProductQuestionsGraph
+ * @package     Ecomteck_ProductQuestionsGraphQl
  * @copyright   Copyright (c) 2019 Ecomteck (https://ecomteck.com/)
  * @license     https://ecomteck.com/LICENSE.txt
  */
@@ -48,7 +48,7 @@ class SubmitQuestion implements ResolverInterface
     /**
      * @var CreateQuestion
      */
-    private $creatQuestion;
+    private $createQuestion;
 
     /**
      * User Type Model
@@ -65,18 +65,18 @@ class SubmitQuestion implements ResolverInterface
     /**
      * SubmitQuestion constructor.
      * @param ProductRepositoryInterface $productRepository
-     * @param CreateQuestion $creatQuestion
+     * @param CreateQuestion $createQuestion
      * @param UserType $userType
      * @param QuestionDataProvider $questionDataProvider
      */
     public function __construct(
         ProductRepositoryInterface $productRepository,
-        CreateQuestion $creatQuestion,
+        CreateQuestion $createQuestion,
         UserType $userType,
         QuestionDataProvider $questionDataProvider
     ) {
         $this->productRepository = $productRepository;
-        $this->creatQuestion = $creatQuestion;
+        $this->createQuestion = $createQuestion;
         $this->userType = $userType;
         $this->questionDataProvider = $questionDataProvider;
     }
@@ -102,7 +102,7 @@ class SubmitQuestion implements ResolverInterface
         $data['question_created_by'] = $userCode;
         $data['question_user_type_id'] = $userCode;
 
-        $question = $this->creatQuestion->execute($data);
+        $question = $this->createQuestion->execute($data);
         try {
             $questionData = $this->questionDataProvider->getData($question->getId());
         } catch (NoSuchEntityException $e) {
