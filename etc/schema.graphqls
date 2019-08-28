@@ -1,0 +1,114 @@
+# Copyright © Ecomteck (ecomteck@gmail.com). All rights reserved.
+# Please visit Ecomteck.com for license details (https://www.ecomteck.com/LICENSE.txt).
+
+type Query {
+    productQuestion(
+        id: Int @doc(description: "Id of the question")
+    ): QuestionInterFace @resolver(class: "\\Ecomteck\\ProductQuestionsGraphQl\\Model\\Resolver\\Question") @doc(description: "The product question query returns information about a question")
+    productQuestions(
+        filter: QuestionFilterInput @doc(description: "Identifies which question attributes to search for and return."),
+        pageSize: Int = 5 @doc(description: "Specifies the maximum number of results to return at once. This attribute is optional."),
+        currentPage: Int = 1 @doc(description: "Specifies which page of results to return. The default value is 1."),
+    ):Questions
+    @resolver(class: "Ecomteck\\ProductQuestionsGraphQl\\Model\\Resolver\\Questions") @doc(description: "The questions query searches for questions that match the criteria specified in the search and filter attributes")
+
+    productQuestionAnswer(
+        id: Int @doc(description: "Id of the answer")
+    ): AnswerInterFace @resolver(class: "\\Ecomteck\\ProductQuestionsGraphQl\\Model\\Resolver\\Answer") @doc(description: "The query returns information about a answer")
+    productQuestionAnswers(
+        filter: AnswerFilterInput @doc(description: "Identifies which answer attributes to search for and return."),
+        pageSize: Int = 5 @doc(description: "Specifies the maximum number of results to return at once. This attribute is optional."),
+        currentPage: Int = 1 @doc(description: "Specifies which page of results to return. The default value is 1."),
+    ):Answers
+    @resolver(class: "Ecomteck\\ProductQuestionsGraphQl\\Model\\Resolver\\Answers") @doc(description: "The questions query searches for questions that match the criteria specified in the search and filter attributes")
+}
+
+type QuestionInterFace @doc(description: "product question defines all question information") {
+    question_id: Int @doc(description: "Id of the question")
+    question_detail: String @doc(description: "Detail of the question")
+    question_author_name: String @doc(description: "product question author name")
+    question_author_email: String @doc(description: "product question author email")
+    question_status_id: Int @doc(description: "question status id")
+    question_user_type_id: Int @doc(description: "question user type id")
+    customer_id: Int @doc(description: "customer id")
+    question_visibility_id: Int @doc(description: "question visibility id")
+    question_store_id: Int @doc(description: "store id")
+    question_likes: Int @doc(description: "question likes")
+    question_dislikes: Int @doc(description: "question dislikes")
+    total_answers: Int @doc(description: "question total answers")
+    pending_answers: Int @doc(description: "question pending answers")
+    product_id: Int @doc(description: "product id")
+    question_created_by: Int @doc(description: "question created by")
+    question_created_at: String @doc(description: "question created at")
+}
+
+type AnswerInterFace @doc(description: "the product question defines all answer information") {
+    answer_id: Int @doc(description: "Id of the answer")
+    answer_detail: String @doc(description: "Detail of the answer")
+    answer_author_name: String @doc(description: "answer question author name")
+    answer_author_email: String @doc(description: "answer question author email")
+    question_id: Int @doc(description: "question id which answer posts in")
+    answer_status_id: Int @doc(description: "answer status id")
+    answer_user_type_id: Int @doc(description: "answer user type id")
+    answer_user_id: Int @doc(description: "answer user id")
+    answer_visibility_id: Int @doc(description: "answer visibility id")
+    answer_likes: Int @doc(description: "answer likes")
+    answer_dislikes: Int @doc(description: "answer dislikes")
+    answer_created_by: Int @doc(description: "answer created by")
+    answer_created_at: String @doc(description: "answer created at")
+}
+
+type Questions @doc(description: "The Questions object is the top-level object returned in a question search") {
+    total_count:  Int @doc(description: "The number of questions returned")
+    items: [QuestionInterFace] @doc(description: "An array of questions that match the specified search criteria")
+}
+
+type Answers @doc(description: "The Answers object is the top-level object returned in a answer search") {
+    total_count:  Int @doc(description: "The number of answers returned")
+    items: [AnswerInterFace] @doc(description: "An array of answers that match the specified search criteria")
+}
+
+input QuestionFilterInput @doc(description: "QuestionFilterInput defines the filters to be used in the search. A filter contains at least one attribute, a comparison operator, and the value that is being searched for.") {
+    question_author_name: FilterTypeInput @doc(description: "The author name who posts the product questions")
+    question_author_email: FilterTypeInput @doc(description: "author email")
+    question_status_id: FilterTypeInput @doc(description: "question status id")
+    customer_id: FilterTypeInput @doc(description: "customer id")
+    question_visibility_id: FilterTypeInput @doc(description: "question visibility id")
+    question_store_id: FilterTypeInput @doc(description: "store id")
+    product_id: FilterTypeInput @doc(description: "product id")
+    or: QuestionFilterInput @doc(description: "The keyword required to perform a logical OR comparison")
+}
+
+input AnswerFilterInput @doc(description: "AnswerFilterInput defines the filters to be used in the search. A filter contains at least one attribute, a comparison operator, and the value that is being searched for.") {
+    answer_author_name: FilterTypeInput @doc(description: "The author name who posts the answer for question")
+    answer_author_email: FilterTypeInput @doc(description: "author email")
+    answer_status_id: FilterTypeInput @doc(description: "answer status id")
+    question_id: FilterTypeInput @doc(description: "question id")
+    answer_visibility_id: FilterTypeInput @doc(description: "answer visibility id")
+    answer_store_id: FilterTypeInput @doc(description: "store id")
+    answer_user_id: FilterTypeInput @doc(description: "answer user id")
+    or: AnswerFilterInput @doc(description: "The keyword required to perform a logical OR comparison")
+}
+
+type Mutation {
+    submitProductQuestion(
+        input: SubmitProductQuestionInput
+    ): QuestionInterFace @resolver(class: "\\Ecomteck\\ProductQuestionsGraphQl\\Model\\Resolver\\SubmitQuestion") @doc(description:"submit a question for the product and return to question interface")
+    submitProductQuestionAnswer(
+        input: SubmitProductQuestionAnswerInput
+    ): AnswerInterFace @resolver(class: "\\Ecomteck\\ProductQuestionsGraphQl\\Model\\Resolver\\SubmitAnswer") @doc(description:"submit a question for the product and return to question interface")
+}
+
+input SubmitProductQuestionInput {
+    product_id: Int! @doc(description: "the product id which question submited")
+    question_detail: String! @doc(description: "the detail of question")
+    question_author_name: String! @doc(description: "question author name")
+    question_author_email: String! @doc(description: "question author email")
+}
+
+input SubmitProductQuestionAnswerInput {
+    question_id: Int! @doc(description: "the question id which answer submited")
+    answer_detail: String! @doc(description: "the detail of answer")
+    answer_author_name: String! @doc(description: "answer author name")
+    answer_author_email: String! @doc(description: "answer author email")
+}
